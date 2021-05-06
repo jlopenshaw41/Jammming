@@ -34,7 +34,7 @@ class Track extends React.Component {
             {this.props.track.artist} | {this.props.track.album}
           </p>
         </div>
-        {/* <button class="Track-action"><!-- + or - will go here --></button> */}
+        {this.renderAction()}
       </div>
     );
   }
