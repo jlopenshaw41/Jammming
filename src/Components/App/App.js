@@ -10,27 +10,9 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      searchResults: [
-        { name: "Rocketman", artist: "Elton John", album: "Diamonds", id: 1 },
-        {
-          name: "Crocodile Rock",
-          artist: "Elton John",
-          album: "Diamonds",
-          id: 2,
-        },
-        { name: "Daniel", artist: "Elton John", album: "Diamonds", id: 3 },
-      ],
-      playlistName: "Jen's Playlist",
-      playlistTracks: [
-        {
-          name: "Yellow Brick Road",
-          artist: "The Beatles",
-          album: "One",
-          id: 3,
-        },
-        { name: "Help!", artist: "The Beatles", album: "One", id: 4 },
-        { name: "Hey Jude", artist: "The Beatles", album: "One", id: 5 },
-      ],
+      searchResults: [],
+      playlistName: "My Playlist",
+      playlistTracks: [],
     };
 
     this.addTrack = this.addTrack.bind(this);
@@ -41,32 +23,38 @@ class App extends React.Component {
   }
 
   addTrack(track) {
-    if (
-      this.state.playlistTracks.find((savedTrack) => savedTrack.id === track.id)
-    ) {
+    let tracks = this.state.playlistTracks;
+    if (tracks.find((savedTrack) => savedTrack.id === track.id)) {
       return;
-    } else {
-      this.setState.playlistTracks({ track });
     }
+
+    tracks.push(track);
+    this.setState({ playlistTracks: tracks });
   }
 
   removeTrack(track) {
-    const updatedPlaylist = this.state.playlistTracks.filter(
-      (currentTrack) => currentTrack.id === track.id
-    );
-    this.setState.playlistTracks(updatedPlaylist);
+    let tracks = this.state.playlistTracks;
+    tracks = tracks.filter((currentTrack) => currentTrack.id !== track.id);
+
+    this.setState({ playlistTracks: tracks });
   }
 
   updatePlaylistName(name) {
-    this.setState.playlistName({ name });
+    this.setState({ playlistName: name });
   }
 
   savePlaylist() {
     const trackURIs = this.state.playlistTracks.map((track) => track.uri);
+    Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
+      this.setState({
+        playlistName: "New Playlist",
+        playlistTracks: [],
+      });
+    });
   }
 
-  search(searchTerm) {
-    Spotify.search(searchTerm).then((searchResults) => {
+  search(term) {
+    Spotify.search(term).then((searchResults) => {
       this.setState({ searchResults: searchResults });
     });
   }
