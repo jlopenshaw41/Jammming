@@ -1,6 +1,6 @@
 let accessToken;
 
-const clientID = "DELETED - RETRIEVE FROM SPOTIFY ACCOUNT";
+const clientID = "DELETED - GET FROM SPOTIFY DASHBOARD";
 const redirectURI = "http://jlo-jamming.surge.sh";
 
 const Spotify = {
